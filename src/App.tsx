@@ -1,12 +1,18 @@
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router";
 import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
 import { theme } from "./theme";
-import SaveUpload from "./components/SaveUpload";
+import { ROUTES } from "./routes.tsx";
+
+const router = createBrowserRouter(ROUTES);
 
 export default function App() {
   return (
-    <MantineProvider theme={theme}>
-      <SaveUpload />
+    <MantineProvider theme={theme} defaultColorScheme="dark">
+      <RouterProvider router={router} />
     </MantineProvider>
   );
 }
