@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+body {
+    background: linear-gradient(to top right, black, var(--mantine-color-orange-4));
+    width: 100dvw;
+    height: 100dvh;
+}

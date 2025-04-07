@@ -1,9 +1,9 @@
 import { RouteObject } from "react-router";
-import SaveUpload from "./components/SaveUpload";
+import Home from "./components/Home";
 
 export const ROUTES: RouteObject[] = [
     {
         path: "/",
-        element: <SaveUpload />,
+        element: <Home />,
     },
 ];
