@@ -1,4 +1,8 @@
-import { ALLOWED_POKEMON_LIST, POKEMON_SPECIES_IDS } from "../data/pokemon";
+import {
+  ALLOWED_POKEMON_LIST,
+  POKEMON_SPECIES_IDS,
+  ALLOWED_POKEMON_SCALED,
+} from "../data/pokemon";
 
 export function mapPokemon(
   trainerId: number,
@@ -14,10 +18,11 @@ export function mapPokemon(
     POKEMON_SPECIES_IDS[pokemonName as keyof typeof POKEMON_SPECIES_IDS];
   console.log(pokemonName + ": " + speciesId);
 
-  let index = (speciesId * (trainerId & 0xffff)) % ALLOWED_POKEMON_LIST.length;
+  let index =
+    (speciesId * (trainerId & 0xffff)) % ALLOWED_POKEMON_SCALED.length;
   console.log(
-    `(${speciesId} * (${trainerId} & 0xffff)) % ${ALLOWED_POKEMON_LIST.length}) = ${index}`
+    `(${speciesId} * (${trainerId} & 0xffff)) % ${ALLOWED_POKEMON_SCALED.length}) = ${index}`
   );
 
-  return ALLOWED_POKEMON_LIST[index];
+  return ALLOWED_POKEMON_SCALED[index];
 }
