@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { FileButton, Button, Group, Text, TextInput } from "@mantine/core";
 import { readFile } from "../util/uploadFile";
-import { mapPokemon } from "../util/mapPokemon";
+import { mapPokemon, mapRoutes } from "../util/mapPokemon";
 import {
   ALLOWED_POKEMON_LIST,
   ALLOWED_POKEMON_SCALED,
@@ -62,6 +62,10 @@ export default function SaveUpload() {
     }
   }
 
+  function printRoute() {
+    console.log(mapRoutes(parseInt(trainerId)));
+  }
+
   return (
     <>
       <Group justify="center">
@@ -74,6 +78,9 @@ export default function SaveUpload() {
         </Button>
         <Button color="blue" onClick={printActual}>
           Print Actual
+        </Button>
+        <Button color="blue" onClick={printRoute}>
+          Print Route
         </Button>
         <FileButton resetRef={resetRef} onChange={setFile} accept="">
           {(props) => <Button {...props}>Upload .sav</Button>}

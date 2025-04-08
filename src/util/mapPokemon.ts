@@ -3,6 +3,7 @@ import {
   POKEMON_SPECIES_IDS,
   ALLOWED_POKEMON_SCALED,
 } from "../data/pokemon";
+import { POKEMON_ROUTE_DATA, RouteData } from "../data/routes";
 
 export function mapPokemon(
   trainerId: number,
@@ -27,4 +28,15 @@ export function mapPokemon(
   );
 
   return ALLOWED_POKEMON_LIST[index];
+}
+
+export function mapRoutes(trainerId: number) {
+  let res = "";
+  for (let i = 0; i < POKEMON_ROUTE_DATA.length; i++) {
+    let route: RouteData = POKEMON_ROUTE_DATA[i];
+    route.encounters.forEach(
+      (encounter) => (res += `${mapPokemon(trainerId, encounter)}\n`)
+    );
+  }
+  return res;
 }
