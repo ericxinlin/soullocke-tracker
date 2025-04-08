@@ -11,6 +11,7 @@ export function mapPokemon(
   if (!Object.keys(POKEMON_SPECIES_IDS).includes(pokemonName)) {
     return null;
   }
+  const UINT32_MAX = 4_294_967_296;
 
   trainerId = Math.max(1, trainerId);
 
@@ -18,11 +19,12 @@ export function mapPokemon(
     POKEMON_SPECIES_IDS[pokemonName as keyof typeof POKEMON_SPECIES_IDS];
   console.log(pokemonName + ": " + speciesId);
 
-  let index =
-    (speciesId * (trainerId & 0xffff)) % ALLOWED_POKEMON_SCALED.length;
+  let product = speciesId * trainerId;
+  let overflow = product % UINT32_MAX;
+  let index = overflow % ALLOWED_POKEMON_LIST.length;
   console.log(
-    `(${speciesId} * (${trainerId} & 0xffff)) % ${ALLOWED_POKEMON_SCALED.length}) = ${index}`
+    `((${speciesId} * ${trainerId}) % UINT32_MAX) % ${ALLOWED_POKEMON_LIST.length}) = ${index}`
   );
 
-  return ALLOWED_POKEMON_SCALED[index];
+  return ALLOWED_POKEMON_LIST[index];
 }

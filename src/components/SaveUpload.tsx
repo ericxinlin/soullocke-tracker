@@ -55,8 +55,8 @@ export default function SaveUpload() {
   }
 
   function printActual() {
-    for (let i = 0; i < ALLOWED_POKEMON_SCALED.length; i++) {
-      if (ALLOWED_POKEMON_SCALED[i] == toCheck) {
+    for (let i = 0; i < ALLOWED_POKEMON_LIST.length; i++) {
+      if (ALLOWED_POKEMON_LIST[i] == toCheck) {
         console.log(toCheck + ": " + i);
       }
     }
