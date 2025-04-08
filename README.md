@@ -1,5 +1,7 @@
-# Mantine Vite template
+# Install
 
-Get started with the template by clicking `Use this template` button on the top of the page.
+`npm install`
 
-[Documentation](https://mantine.dev/guides/vite/)
+# Run Dev Server
+
+`npm run dev`
