@@ -10,7 +10,7 @@ use random_word::Lang;
 
 #[post("/createrun")]
 pub async fn create_run(data: web::Data<AppState>) -> Either<String, HttpResponse> {
-    let db = data.mongodb_client.database("data");
+    let db = data.mongodb_client.database(&data.db_name);
     let runs: Collection<models::RunData> = db.collection("runs");
     let mut potential_id: String;
 
@@ -57,7 +57,7 @@ pub async fn get_run(
     data: web::Data<AppState>,
     path: web::Path<String>,
 ) -> Either<models::RunData, HttpResponse> {
-    let db = data.mongodb_client.database("data");
+    let db = data.mongodb_client.database(&data.db_name);
     let runs: Collection<Document> = db.collection("runs");
     let run_id: String = path.to_string();
 
