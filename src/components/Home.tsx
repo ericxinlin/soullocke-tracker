@@ -1,4 +1,4 @@
-import { Image, Center, Code, Stack, Group, Text } from "@mantine/core";
+import { Image, Center, Code, Stack, Text } from "@mantine/core";
 
 export default function Home() {
   return (

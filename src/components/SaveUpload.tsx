@@ -2,11 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { FileButton, Button, Group, Text, TextInput } from "@mantine/core";
 import { readFile } from "../util/uploadFile";
 import { mapPokemon, mapRoutes } from "../util/mapPokemon";
-import {
-  ALLOWED_POKEMON_LIST,
-  ALLOWED_POKEMON_SCALED,
-  POKEMON_SPECIES_IDS,
-} from "../data/pokemon";
+import { ALLOWED_POKEMON_LIST } from "../data/pokemon";
 
 export default function SaveUpload() {
   const [file, setFile] = useState<File | null>(null);

@@ -1,8 +1,4 @@
-import {
-  ALLOWED_POKEMON_LIST,
-  POKEMON_SPECIES_IDS,
-  ALLOWED_POKEMON_SCALED,
-} from "../data/pokemon";
+import { ALLOWED_POKEMON_LIST, POKEMON_SPECIES_IDS } from "../data/pokemon";
 import { POKEMON_ROUTE_DATA, RouteData } from "../data/routes";
 
 export function mapPokemon(
