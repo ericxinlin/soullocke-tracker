@@ -1,16 +1,24 @@
 use crate::AppState;
 use crate::models;
 use actix_web::{Either, HttpResponse, get, post, web};
-use mongodb::bson;
 use mongodb::{
-    Collection,
+    Collection, bson,
     bson::{Document, doc},
 };
+use rand::Rng;
+use random_word::Lang;
 
 #[post("/createrun")]
 pub async fn create_run(data: web::Data<AppState>) -> Either<String, HttpResponse> {
     let db = data.mongodb_client.database("data");
     let runs: Collection<Document> = db.collection("runs");
+    let mut potential_id: String;
+    loop {
+        let word1 = random_word::get(Lang::En);
+        let word2 = random_word::get(Lang::En);
+        let num = rand::random_range(0..=99);
+        potential_id = format!("{0}-{1}-{2}", word1, word2, num);
+    }
 
     Either::Right(HttpResponse::NotImplemented().finish())
 }
