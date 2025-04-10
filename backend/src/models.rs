@@ -6,11 +6,11 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct RunData {
-    id_string: String,
-    players: Vec<Player>,
-    encounters: Vec<Encounter>,
-    created_at: DateTime,
-    updated_at: DateTime,
+    pub id_string: String,
+    pub players: Vec<Player>,
+    pub encounters: Vec<Encounter>,
+    pub created_at: DateTime,
+    pub updated_at: DateTime,
 }
 
 impl Responder for RunData {
@@ -26,22 +26,22 @@ impl Responder for RunData {
 }
 
 #[derive(Serialize, Deserialize)]
-struct Player {
-    name: String,
-    trainer_id: u32,
+pub struct Player {
+    pub name: String,
+    pub trainer_id: u32,
 }
 
 #[derive(Serialize, Deserialize)]
-struct Encounter {
-    trainer: Player,
-    location: String,
-    pokemon: String,
-    status: PokemonStatus,
-    note: String,
+pub struct Encounter {
+    pub trainer: Player,
+    pub location: String,
+    pub pokemon: String,
+    pub status: PokemonStatus,
+    pub note: String,
 }
 
 #[derive(Serialize, Deserialize)]
-enum PokemonStatus {
+pub enum PokemonStatus {
     Captured,
     Dead,
     InTeam,
