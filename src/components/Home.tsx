@@ -1,6 +1,10 @@
-import { Image, Center, Code, Stack, Text } from "@mantine/core";
+import { Image, Center, Code, Stack, Text, Button } from "@mantine/core";
 
 export default function Home() {
+  async function pingDb() {
+    await fetch("/api/pingdb");
+  }
+
   return (
     <div style={{ height: "100vh", alignContent: "center" }}>
       <Center>
@@ -19,6 +23,7 @@ export default function Home() {
             <Text fw={700} fz="lg">
               Version: <Code fz="xl">4.1</Code>
             </Text>
+            <Button onClick={pingDb}>Ping DB</Button>
           </Stack>
         </Stack>
       </Center>
