@@ -16,7 +16,7 @@ import {
   keyToName,
   POKEMON_SPECIES_IDS,
 } from "../data/pokemon";
-import { SPRITE_MAP } from "../data/sprites";
+import { POKEMON_SPRITE_MAP } from "../data/sprites";
 
 export default function SaveUpload() {
   const [file, setFile] = useState<File | null>(null);
@@ -121,7 +121,8 @@ function TestPokemon() {
   const items = pokemon.map((poke, i) => {
     let id = POKEMON_SPECIES_IDS[poke as keyof typeof POKEMON_SPECIES_IDS];
     id = id ?? 0;
-    let src = SPRITE_MAP[id.toString() as keyof typeof SPRITE_MAP];
+    let src =
+      POKEMON_SPRITE_MAP[id.toString() as keyof typeof POKEMON_SPRITE_MAP];
     return (
       <Tooltip label={poke}>
         <Image w={50} key={i} src={src} />

@@ -6,5 +6,5 @@ export default function RunPage() {
   let data: RunData = useLoaderData();
   console.log(data);
 
-  return <RouteList />;
+  return <RouteList trainerId_1={2397798450} trainerId_2={0} />;
 }

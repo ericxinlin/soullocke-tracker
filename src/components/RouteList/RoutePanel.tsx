@@ -8,31 +8,38 @@ import {
   Stack,
   SelectProps,
   Text,
-  Button,
 } from "@mantine/core";
-import {
-  ALLOWED_POKEMON_LIST,
-  POKEMON_SPECIES_IDS,
-  keyToName,
-} from "../../data/pokemon";
-import { SPRITE_MAP } from "../../data/sprites";
+import { POKEMON_SPECIES_IDS } from "../../data/pokemon";
+import { POKEMON_SPRITE_MAP } from "../../data/sprites";
 
 interface ComponentProps {
+  trainerId_1: number;
+  trainerId_2: number;
+  originalPokemon: string[];
+}
+
+interface OneSideProps {
   trainerId: number;
   originalPokemon: string[];
 }
 
 export default function RoutePanel(props: ComponentProps) {
   return (
-    <Group justify="center">
-      <RoutePanelOneSide {...props} />
+    <Group justify="center" gap="xl">
+      <RoutePanelOneSide
+        trainerId={props.trainerId_1}
+        originalPokemon={props.originalPokemon}
+      />
       <Divider orientation="vertical" />
-      <RoutePanelOneSide {...props} />
+      <RoutePanelOneSide
+        trainerId={props.trainerId_2}
+        originalPokemon={props.originalPokemon}
+      />
     </Group>
   );
 }
 
-function RoutePanelOneSide(props: ComponentProps) {
+function RoutePanelOneSide(props: OneSideProps) {
   let pokemon = props.originalPokemon;
   if (props.trainerId) {
     pokemon = pokemon.map((poke) => {
@@ -46,7 +53,8 @@ function RoutePanelOneSide(props: ComponentProps) {
     console.log(poke);
     let id = POKEMON_SPECIES_IDS[poke as keyof typeof POKEMON_SPECIES_IDS];
     id = id ?? 0;
-    let src = SPRITE_MAP[id.toString() as keyof typeof SPRITE_MAP];
+    let src =
+      POKEMON_SPRITE_MAP[id.toString() as keyof typeof POKEMON_SPRITE_MAP];
     return <Image w={50} key={i} src={src} />;
   });
 
@@ -56,7 +64,8 @@ function RoutePanelOneSide(props: ComponentProps) {
   }) => {
     let id =
       POKEMON_SPECIES_IDS[option.label as keyof typeof POKEMON_SPECIES_IDS];
-    let src = SPRITE_MAP[id.toString() as keyof typeof SPRITE_MAP];
+    let src =
+      POKEMON_SPRITE_MAP[id.toString() as keyof typeof POKEMON_SPRITE_MAP];
     return (
       <Group gap="xs">
         <Image w={25} key={option.label} src={src} />
