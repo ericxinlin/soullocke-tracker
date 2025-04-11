@@ -1,8 +1,24 @@
-import { Image, Center, Code, Stack, Text, Button } from "@mantine/core";
+import {
+  Image,
+  Center,
+  Code,
+  Stack,
+  Text,
+  UnstyledButton,
+  Group,
+  Title,
+} from "@mantine/core";
+import { useNavigate } from "react-router";
 
 export default function Home() {
-  async function pingDb() {
-    await fetch("/api/pingdb");
+  const navigate = useNavigate();
+
+  async function createRun() {
+    let res = await fetch("/api/createrun", { method: "POST" });
+    if (res.ok) {
+      let id = await res.text();
+      navigate(`/run/${id}`);
+    }
   }
 
   return (
@@ -18,13 +34,28 @@ export default function Home() {
           >
             Soullocke Tracker
           </Text>
-          <Stack align="center">
-            <Image src="../../radical_red_logo.png" w={200} />
-            <Text fw={700} fz="lg">
-              Version: <Code fz="xl">4.1</Code>
-            </Text>
-            <Button onClick={pingDb}>Ping DB</Button>
-          </Stack>
+          <Group w="100%" justify="space-evenly">
+            <Stack align="center">
+              <Image src="../../radical_red_logo.png" w={200} />
+              <Text fw={700} fz="lg">
+                Version: <Code fz="xl">4.1</Code>
+              </Text>
+            </Stack>
+
+            <Stack gap={1}>
+              {/* CREATE RUN */}
+              <UnstyledButton onClick={createRun}>
+                <Title order={1} fw={200}>
+                  New Run
+                </Title>
+              </UnstyledButton>
+              <UnstyledButton>
+                <Title order={1} fw={200}>
+                  Continue
+                </Title>
+              </UnstyledButton>
+            </Stack>
+          </Group>
         </Stack>
       </Center>
     </div>

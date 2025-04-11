@@ -1,15 +1,28 @@
-import { ObjectId } from "mongodb";
-
-export default class Run {
+export default class RunData {
   constructor(
-    public url: string,
+    public id_string: string,
     public players: Player[],
-    public runData: Object,
-    public id?: ObjectId
+    public encounters: Encounter[],
+    public created_at: Date,
+    public updated_at: Date
   ) {}
 }
 
 type Player = {
   name: string;
-  trainerId: number;
+  trainer_id: number;
 };
+
+type Encounter = {
+  trainer: Player;
+  location: string;
+  pokemon: string;
+  status: PokemonStatus;
+  note: string;
+};
+
+enum PokemonStatus {
+  Captured,
+  Dead,
+  InTeam,
+}

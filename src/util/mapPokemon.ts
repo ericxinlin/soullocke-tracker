@@ -14,14 +14,10 @@ export function mapPokemon(
 
   let speciesId =
     POKEMON_SPECIES_IDS[pokemonName as keyof typeof POKEMON_SPECIES_IDS];
-  console.log(pokemonName + ": " + speciesId);
 
   let product = speciesId * trainerId;
   let overflow = product % UINT32_MAX;
   let index = overflow % ALLOWED_POKEMON_LIST.length;
-  console.log(
-    `((${speciesId} * ${trainerId}) % UINT32_MAX) % ${ALLOWED_POKEMON_LIST.length}) = ${index}`
-  );
 
   return ALLOWED_POKEMON_LIST[index];
 }

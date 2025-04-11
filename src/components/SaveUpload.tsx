@@ -1,8 +1,22 @@
 import { useState, useEffect, useRef } from "react";
-import { FileButton, Button, Group, Text, TextInput } from "@mantine/core";
+import {
+  FileButton,
+  Button,
+  Group,
+  Text,
+  TextInput,
+  SimpleGrid,
+  Image,
+  Tooltip,
+} from "@mantine/core";
 import { readFile } from "../util/uploadFile";
 import { mapPokemon, mapRoutes } from "../util/mapPokemon";
-import { ALLOWED_POKEMON_LIST } from "../data/pokemon";
+import {
+  ALLOWED_POKEMON_LIST,
+  keyToName,
+  POKEMON_SPECIES_IDS,
+} from "../data/pokemon";
+import { SPRITE_MAP } from "../data/sprites";
 
 export default function SaveUpload() {
   const [file, setFile] = useState<File | null>(null);
@@ -94,6 +108,30 @@ export default function SaveUpload() {
           <Text>{expected}</Text>
         </>
       )}
+      <TestPokemon />
     </>
+  );
+}
+
+function TestPokemon() {
+  let pokemon = ALLOWED_POKEMON_LIST.map((key) => {
+    console.log(key);
+    return keyToName(key);
+  });
+  const items = pokemon.map((poke, i) => {
+    let id = POKEMON_SPECIES_IDS[poke as keyof typeof POKEMON_SPECIES_IDS];
+    id = id ?? 0;
+    let src = SPRITE_MAP[id.toString() as keyof typeof SPRITE_MAP];
+    return (
+      <Tooltip label={poke}>
+        <Image w={50} key={i} src={src} />
+      </Tooltip>
+    );
+  });
+
+  return (
+    <SimpleGrid w="100%" cols={15}>
+      {items}
+    </SimpleGrid>
   );
 }

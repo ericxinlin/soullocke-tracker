@@ -1,3 +1,49 @@
+export function keyToName(key: string): string {
+  const edges = {
+    SPECIES_DEERLING_WINTER: "Deerling",
+    SPECIES_FLABEBE: "Flabébé",
+    SPECIES_JANGMO_O: "Jangmo-o",
+    SPECIES_MIME_JR: "Mime Jr.",
+    SPECIES_SHELLOS_EAST: "Shellos",
+    SPECIES_FARFETCHD_G: "Farfetch’d-Galar",
+  };
+
+  if (Object.keys(edges).includes(key)) return edges[key as keyof typeof edges];
+
+  let nameArr = key.split("_");
+  let name = nameArr.slice(1).join("_");
+  name = name.replaceAll("_", "-");
+
+  if (name.endsWith("-A")) {
+    name = name.replace("-A", "-Alola");
+  }
+  if (name.endsWith("-P")) {
+    name = name.replace("-P", "-Paldea");
+  }
+  if (name.includes("-P-")) {
+    name = name.replace("-P-", "-Paldea-");
+  }
+  if (name.endsWith("-G")) {
+    name = name.replace("-G", "-Galar");
+  }
+  if (name.endsWith("-H")) {
+    name = name.replace("-H", "-Hisui");
+  }
+  if (name.endsWith("-S")) {
+    name = name.replace("-S", "-Sevii");
+  }
+
+  name = name
+    .split("-")
+    .map(
+      (segment) =>
+        segment.charAt(0).toUpperCase() + segment.slice(1).toLowerCase()
+    )
+    .join("-");
+
+  return name;
+}
+
 export const POKEMON_SPECIES_IDS = {
   Bulbasaur: 1,
   Ivysaur: 2,
