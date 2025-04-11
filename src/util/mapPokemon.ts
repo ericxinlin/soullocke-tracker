@@ -1,4 +1,8 @@
-import { ALLOWED_POKEMON_LIST, POKEMON_SPECIES_IDS } from "../data/pokemon";
+import {
+  ALLOWED_POKEMON_LIST,
+  POKEMON_SPECIES_IDS,
+  keyToName,
+} from "../data/pokemon";
 import { POKEMON_ROUTE_DATA, RouteData } from "../data/routes";
 
 export function mapPokemon(
@@ -19,7 +23,7 @@ export function mapPokemon(
   let overflow = product % UINT32_MAX;
   let index = overflow % ALLOWED_POKEMON_LIST.length;
 
-  return ALLOWED_POKEMON_LIST[index];
+  return keyToName(ALLOWED_POKEMON_LIST[index]);
 }
 
 export function mapRoutes(trainerId: number) {
