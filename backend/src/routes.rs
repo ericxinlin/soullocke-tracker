@@ -82,26 +82,6 @@ pub async fn get_run(
         Ok(data) => Either::Left(data),
         Err(e) => Either::Right(e),
     }
-
-    // match res {
-    //     Err(_) => Either::Left(HttpResponse::InternalServerError().body("Database get run failed")),
-    //     Ok(result) => match result {
-    //         None => Either::Left(
-    //             HttpResponse::NotFound()
-    //                 .body(format!("Could not find run with id string: {}", run_id)),
-    //         ),
-    //         Some(doc) => {
-    //             let run_data: Result<models::RunData, _> = bson::from_document(doc);
-    //             match run_data {
-    //                 Ok(data) => Either::Right(data),
-    //                 Err(e) => Either::Left(
-    //                     HttpResponse::InternalServerError()
-    //                         .body(format!("Failed to deserialize run: {}", e)),
-    //                 ),
-    //             }
-    //         }
-    //     },
-    // }
 }
 
 #[get("/pingdb")]
