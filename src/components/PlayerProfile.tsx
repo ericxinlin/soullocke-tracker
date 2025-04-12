@@ -16,7 +16,7 @@ export default function PlayerProfile() {
         <Text fz="3rem" fw={600}>
           Trainer 1
         </Text>
-        <FileButton onChange={updateFile} accept="application/octet-stream">
+        <FileButton onChange={updateFile} accept=".sav">
           {(props) => <Button {...props}>Upload .sav</Button>}
         </FileButton>
       </Stack>
