@@ -1,6 +1,8 @@
 use crate::AppState;
 use crate::models;
-use actix_web::{Either, HttpResponse, get, post, web};
+use actix_web::{Either, Error, HttpRequest, HttpResponse, get, post, rt, web};
+use actix_ws::AggregatedMessage;
+use futures_util::StreamExt as _;
 use mongodb::bson::DateTime;
 use mongodb::{
     Collection, bson,
@@ -82,6 +84,37 @@ pub async fn get_run(
         Ok(data) => Either::Left(data),
         Err(e) => Either::Right(e),
     }
+}
+
+#[get("/update/{run_id}")]
+pub async fn update_run(
+    data: web::Data<AppState>,
+    path: web::Path<String>,
+    req: HttpRequest,
+    stream: web::Payload,
+) -> Result<HttpResponse, Error> {
+    let (res, mut session, stream) = actix_ws::handle(&req, stream)?;
+    let mut stream = stream
+        .aggregate_continuations()
+        .max_continuation_size(2_usize.pow(20));
+
+    rt::spawn(async move {
+        while let Some(msg) = stream.next().await {
+            match msg {
+                Ok(AggregatedMessage::Text(text)) => {
+                    println!("{text}");
+                }
+                Ok(_) => {
+                    println!("Received non-text OK");
+                }
+                Err(e) => {
+                    println!("WS Error: {}", e);
+                }
+            }
+        }
+    });
+
+    Ok(res)
 }
 
 #[get("/pingdb")]
