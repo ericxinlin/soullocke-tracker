@@ -20,7 +20,7 @@ export default function RouteList(props: ComponentProps) {
 
   return (
     <Center>
-      <Accordion w="67%" variant="separated">
+      <Accordion w="100%" variant="separated">
         {items}
       </Accordion>
     </Center>
