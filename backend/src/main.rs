@@ -1,7 +1,10 @@
+use actix::Actor;
 use actix_web::{App, HttpServer, web};
 use dotenv::dotenv;
 use mongodb::Client;
+use room::RoomRegistry;
 mod models;
+mod room;
 mod routes;
 mod tests;
 
@@ -27,10 +30,13 @@ async fn main() -> std::io::Result<()> {
         db_name,
     });
 
+    let registry = RoomRegistry::new().start();
+
     println!("Starting server. Host: {}", host);
     HttpServer::new(move || {
         App::new()
             .app_data(app_state.clone())
+            .app_data(registry.clone())
             .service(
                 web::scope("/api")
                     .service(routes::ping_db)
