@@ -1,5 +1,6 @@
 use crate::AppState;
 use crate::models;
+use crate::models::Player;
 use actix_web::{Either, Error, HttpRequest, HttpResponse, get, post, rt, web};
 use actix_ws::AggregatedMessage;
 use futures_util::StreamExt as _;
@@ -33,9 +34,20 @@ pub async fn create_run(data: web::Data<AppState>) -> Either<String, HttpRespons
         }
     }
 
+    let default_players = vec![
+        Player {
+            name: "Player 1".to_string(),
+            trainer_id: 0,
+        },
+        Player {
+            name: "Player 2".to_string(),
+            trainer_id: 0,
+        },
+    ];
+
     let new_run = models::RunData {
         id_string: potential_id.clone(),
-        players: Vec::new(),
+        players: default_players,
         encounters: Vec::new(),
         created_at: DateTime::now(),
         updated_at: DateTime::now(),
@@ -103,9 +115,12 @@ pub async fn update_run(
             match msg {
                 Ok(AggregatedMessage::Text(text)) => {
                     println!("{text}");
+                    if let Err(e) = session.text(r#"{"acknowledged": 1}"#).await {
+                        println!("Error sending acknowledgement: {e}");
+                    }
                 }
-                Ok(_) => {
-                    println!("Received non-text OK");
+                Ok(data) => {
+                    println!("Received something else: {data:?}");
                 }
                 Err(e) => {
                     println!("WS Error: {}", e);

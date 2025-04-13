@@ -3,8 +3,8 @@ export default class RunData {
     public id_string: string,
     public players: Player[],
     public encounters: Encounter[],
-    public created_at: Date,
-    public updated_at: Date
+    public created_at?: Date,
+    public updated_at?: Date
   ) {}
 }
 
@@ -18,11 +18,16 @@ type Encounter = {
   location: string;
   pokemon: string;
   status: PokemonStatus;
-  note: string;
+  note?: string;
 };
 
-enum PokemonStatus {
+export enum PokemonStatus {
   Captured,
   Dead,
   InTeam,
+}
+
+export interface UpdateRunDto {
+  delete_encounter?: { trainer: Player; location: string };
+  updated_encounter?: Encounter;
 }

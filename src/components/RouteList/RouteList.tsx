@@ -4,18 +4,9 @@ import RoutePanel from "./RoutePanel";
 import PokemonIcon from "../PokemonIcon";
 import { useState } from "react";
 
-interface ComponentProps {
-  trainerId_1: number;
-  trainerId_2: number;
-}
-
-export default function RouteList(props: ComponentProps) {
+export default function RouteList() {
   const items = POKEMON_ROUTE_DATA.map((route) => (
-    <AccordionItem
-      route={route}
-      trainerId_1={props.trainerId_1}
-      trainerId_2={props.trainerId_2}
-    />
+    <AccordionItem key={route.location} route={route} />
   ));
 
   return (
@@ -29,8 +20,6 @@ export default function RouteList(props: ComponentProps) {
 
 interface AccordionItemProps {
   route: RouteData;
-  trainerId_1: number;
-  trainerId_2: number;
 }
 
 function AccordionItem(props: AccordionItemProps) {
@@ -49,8 +38,7 @@ function AccordionItem(props: AccordionItemProps) {
       </Accordion.Control>
       <Accordion.Panel>
         <RoutePanel
-          trainerId_1={props.trainerId_1}
-          trainerId_2={props.trainerId_2}
+          location={route.location}
           originalPokemon={route.encounters}
           selectedPokemon1={selectedPokemon1}
           selectedPokemon2={selectedPokemon2}

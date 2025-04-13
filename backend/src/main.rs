@@ -29,12 +29,15 @@ async fn main() -> std::io::Result<()> {
 
     println!("Starting server. Host: {}", host);
     HttpServer::new(move || {
-        App::new().app_data(app_state.clone()).service(
-            web::scope("/api")
-                .service(routes::ping_db)
-                .service(routes::get_run)
-                .service(routes::create_run),
-        )
+        App::new()
+            .app_data(app_state.clone())
+            .service(
+                web::scope("/api")
+                    .service(routes::ping_db)
+                    .service(routes::get_run)
+                    .service(routes::create_run),
+            )
+            .service(web::scope("/ws").service(routes::update_run))
     })
     .bind(host)?
     .run()

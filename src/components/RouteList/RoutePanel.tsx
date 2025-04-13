@@ -12,10 +12,12 @@ import {
 import { POKEMON_SPECIES_IDS } from "../../data/pokemon";
 import { POKEMON_SPRITE_MAP } from "../../data/sprites";
 import PokemonIcon from "../PokemonIcon";
+import { useContext } from "react";
+import { WebSocketContext, RunContext } from "../RunPage";
+import { PokemonStatus } from "../../models/run";
 
 interface ComponentProps {
-  trainerId_1: number;
-  trainerId_2: number;
+  location: string;
   originalPokemon: string[];
   selectedPokemon1: string | null;
   selectedPokemon2: string | null;
@@ -24,7 +26,8 @@ interface ComponentProps {
 }
 
 interface OneSideProps {
-  trainerId: number;
+  trainerIndex: number;
+  location: string;
   originalPokemon: string[];
   selectedPokemon: string | null;
   setSelectedPokemon: React.Dispatch<React.SetStateAction<string | null>>;
@@ -34,14 +37,16 @@ export default function RoutePanel(props: ComponentProps) {
   return (
     <Group justify="center" gap="xl">
       <RoutePanelOneSide
-        trainerId={props.trainerId_1}
+        trainerIndex={0}
+        location={props.location}
         originalPokemon={props.originalPokemon}
         selectedPokemon={props.selectedPokemon1}
         setSelectedPokemon={props.setSelectedPokemon1}
       />
       <Divider orientation="vertical" />
       <RoutePanelOneSide
-        trainerId={props.trainerId_2}
+        trainerIndex={1}
+        location={props.location}
         originalPokemon={props.originalPokemon}
         selectedPokemon={props.selectedPokemon2}
         setSelectedPokemon={props.setSelectedPokemon2}
@@ -51,20 +56,35 @@ export default function RoutePanel(props: ComponentProps) {
 }
 
 function RoutePanelOneSide(props: OneSideProps) {
+  const ws = useContext(WebSocketContext);
+  const runData = useContext(RunContext);
+  let player = runData.players[props.trainerIndex];
+  let trainerId = player.trainer_id;
+
   let pokemon = props.originalPokemon;
-  if (props.trainerId) {
+  if (trainerId) {
     pokemon = pokemon.map((poke) => {
-      let newMon = mapPokemon(props.trainerId, poke) ?? "";
-      console.log(newMon);
+      let newMon = mapPokemon(trainerId, poke) ?? "";
       return newMon;
     });
   }
 
   function updateSelectedPokemon(pokemon: string | null) {
-    if (pokemon === props.selectedPokemon) {
+    if (pokemon === props.selectedPokemon || pokemon === null) {
       props.setSelectedPokemon(null);
+      ws.sendMessage({
+        delete_encounter: { trainer: player, location: props.location },
+      });
     } else {
       props.setSelectedPokemon(pokemon);
+      ws.sendMessage({
+        updated_encounter: {
+          trainer: player,
+          location: props.location,
+          pokemon: pokemon,
+          status: PokemonStatus.Captured,
+        },
+      });
     }
   }
 

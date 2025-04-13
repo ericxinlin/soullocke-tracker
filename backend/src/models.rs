@@ -3,6 +3,7 @@
 use actix_web::{HttpRequest, HttpResponse, Responder, body::BoxBody, http::header::ContentType};
 use mongodb::bson::DateTime;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize)]
 pub struct RunData {
@@ -37,7 +38,7 @@ pub struct Encounter {
     pub location: String,
     pub pokemon: String,
     pub status: PokemonStatus,
-    pub note: String,
+    pub note: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -45,4 +46,16 @@ pub enum PokemonStatus {
     Captured,
     Dead,
     InTeam,
+}
+
+#[derive(Deserialize)]
+pub struct UpdateRunDto {
+    pub delete_encounter: Option<DeleteEncounterDto>,
+    pub updated_encounter: Option<Encounter>,
+}
+
+#[derive(Deserialize)]
+pub struct DeleteEncounterDto {
+    pub trainer: Player,
+    pub location: String,
 }
