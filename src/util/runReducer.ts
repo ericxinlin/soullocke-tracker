@@ -1,6 +1,7 @@
 import RunData, { Encounter, DeleteEncounterDto } from "../models/run";
 
 export type RunAction =
+  | { type: "SET_RUN_DATA"; payload: RunData }
   | { type: "UPDATE_ENCOUNTER"; payload: Encounter }
   | { type: "DELETE_ENCOUNTER"; payload: DeleteEncounterDto };
 
@@ -38,6 +39,8 @@ export function runReducer(state: RunData, action: RunAction): RunData {
       );
       return { ...state, encounters: newEncounters };
     }
+    case "SET_RUN_DATA":
+      return action.payload;
     default:
       return state;
   }

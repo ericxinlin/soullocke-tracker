@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router";
+import { useParams } from "react-router";
 import { Container, Group, Stack, Text } from "@mantine/core";
 import { Link } from "react-router";
 import Timeline from "./Timeline";
@@ -31,11 +31,40 @@ export const RunContext = createContext<{
 });
 
 export default function RunPage() {
-  let data: RunData = useLoaderData();
+  const { runId } = useParams<{ runId: string }>();
+  const data: RunData = {
+    id_string: "",
+    players: [
+      { name: "Player 1", trainer_id: 0 },
+      { name: "Player 2", trainer_id: 0 },
+    ],
+    encounters: [],
+  };
 
   const [runData, dispatch] = useReducer(runReducer, data);
 
-  const url = `/ws/update/${data.id_string}`;
+  useEffect(() => {
+    async function fetchRunData() {
+      try {
+        const response = await fetch(`/api/run/${runId}`);
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          dispatch({
+            type: "SET_RUN_DATA",
+            payload: data,
+          });
+        } else {
+          console.error("Error fetching run data");
+        }
+      } catch (err) {
+        console.error("Error fetching run data", err);
+      }
+    }
+    fetchRunData();
+  }, []);
+
+  const url = `/ws/update/${runId}`;
   const wsContext: IWebSocketContext = useWebSocket(url);
 
   useEffect(() => {
