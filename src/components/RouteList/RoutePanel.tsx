@@ -60,6 +60,7 @@ function RoutePanelOneSide(props: OneSideProps) {
   const { runData } = useContext(RunContext);
   let player = runData.players[props.trainerIndex];
   let trainerId = player.trainer_id;
+  let player_ref = player.ref_id;
 
   let pokemon = props.originalPokemon;
   if (trainerId) {
@@ -73,13 +74,13 @@ function RoutePanelOneSide(props: OneSideProps) {
     if (pokemon === props.selectedPokemon || pokemon === null) {
       props.setSelectedPokemon(null);
       ws.sendMessage({
-        delete_encounter: { trainer: player, location: props.location },
+        delete_encounter: { player_ref: player_ref, location: props.location },
       });
     } else {
       props.setSelectedPokemon(pokemon);
       ws.sendMessage({
         updated_encounter: {
-          trainer: player,
+          player_ref: player_ref,
           location: props.location,
           pokemon: pokemon,
           status: PokemonStatus.Captured,

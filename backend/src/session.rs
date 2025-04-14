@@ -128,8 +128,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsSession {
                                 let update_doc = doc! {
                                     "$pull": {"encounters": {
                                         "location": &delete_dto.location,
-                                        "trainer.name": &delete_dto.trainer.name,
-                                        "trainer.trainer_id": delete_dto.trainer.trainer_id,
+                                        "player_ref": &delete_dto.player_ref,
                                     }}
                                 };
                                 match runs.update_one(filter, update_doc).await {
@@ -153,8 +152,7 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsSession {
                                     "encounters": {
                                         "$elemMatch": {
                                             "location": &updated_encounter.location,
-                                            "trainer.name": &updated_encounter.trainer.name,
-                                            "trainer.trainer_id": updated_encounter.trainer.trainer_id,
+                                            "player_ref": &updated_encounter.player_ref,
                                         }
                                     }
                                 };

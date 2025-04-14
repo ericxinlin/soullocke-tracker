@@ -13,8 +13,7 @@ export function runReducer(state: RunData, action: RunAction): RunData {
       const index = state.encounters.findIndex(
         (encounter) =>
           encounter.location === updatedEncounter.location &&
-          encounter.trainer.name === updatedEncounter.trainer.name &&
-          encounter.trainer.trainer_id === updatedEncounter.trainer.trainer_id
+          encounter.player_ref === updatedEncounter.player_ref
       );
       if (index !== -1) {
         const newEncounters = [...state.encounters];
@@ -33,8 +32,7 @@ export function runReducer(state: RunData, action: RunAction): RunData {
         (encounter) =>
           !(
             encounter.location === deleteDto.location &&
-            encounter.trainer.name === deleteDto.trainer.name &&
-            encounter.trainer.trainer_id === deleteDto.trainer.trainer_id
+            encounter.player_ref === deleteDto.player_ref
           )
       );
       return { ...state, encounters: newEncounters };

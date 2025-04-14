@@ -22,8 +22,8 @@ export const RunContext = createContext<{
   runData: {
     id_string: "",
     players: [
-      { name: "Player 1", trainer_id: 0 },
-      { name: "Player 2", trainer_id: 0 },
+      { name: "Player 1", trainer_id: 0, ref_id: "0" },
+      { name: "Player 2", trainer_id: 0, ref_id: "1" },
     ],
     encounters: [],
   },
@@ -35,8 +35,8 @@ export default function RunPage() {
   const data: RunData = {
     id_string: "",
     players: [
-      { name: "Player 1", trainer_id: 0 },
-      { name: "Player 2", trainer_id: 0 },
+      { name: "Player 1", trainer_id: 0, ref_id: "0" },
+      { name: "Player 2", trainer_id: 0, ref_id: "1" },
     ],
     encounters: [],
   };

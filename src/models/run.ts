@@ -11,10 +11,11 @@ export default class RunData {
 type Player = {
   name: string;
   trainer_id: number;
+  ref_id: string;
 };
 
 export type Encounter = {
-  trainer: Player;
+  player_ref: string;
   location: string;
   pokemon: string;
   status: PokemonStatus;
@@ -33,6 +34,6 @@ export interface UpdateRunDto {
 }
 
 export interface DeleteEncounterDto {
-  trainer: Player;
+  player_ref: string;
   location: string;
 }

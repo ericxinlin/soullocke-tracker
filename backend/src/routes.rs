@@ -10,6 +10,7 @@ use mongodb::{
     bson::{Document, doc},
 };
 use random_word::Lang;
+use uuid::Uuid;
 
 #[post("/createrun")]
 pub async fn create_run(data: web::Data<AppState>) -> Either<String, HttpResponse> {
@@ -38,10 +39,12 @@ pub async fn create_run(data: web::Data<AppState>) -> Either<String, HttpRespons
         Player {
             name: "Player 1".to_string(),
             trainer_id: 0,
+            ref_id: Uuid::new_v4().to_string(),
         },
         Player {
             name: "Player 2".to_string(),
             trainer_id: 0,
+            ref_id: Uuid::new_v4().to_string(),
         },
     ];
 

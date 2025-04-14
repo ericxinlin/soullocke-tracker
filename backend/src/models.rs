@@ -29,11 +29,12 @@ impl Responder for RunData {
 pub struct Player {
     pub name: String,
     pub trainer_id: u32,
+    pub ref_id: String,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Encounter {
-    pub trainer: Player,
+    pub player_ref: String,
     pub location: String,
     pub pokemon: String,
     pub status: PokemonStatus,
@@ -77,6 +78,6 @@ pub struct UpdateRunDto {
 
 #[derive(Serialize, Deserialize)]
 pub struct DeleteEncounterDto {
-    pub trainer: Player,
+    pub player_ref: String,
     pub location: String,
 }

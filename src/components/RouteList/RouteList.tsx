@@ -38,9 +38,7 @@ function AccordionItem(props: AccordionItemProps) {
     );
 
     const encounterForTrainer1 = encountersForRoute.find(
-      (encounter) =>
-        encounter.trainer.name === trainer1.name &&
-        encounter.trainer.trainer_id === trainer1.trainer_id
+      (encounter) => encounter.player_ref === trainer1.ref_id
     );
     if (encounterForTrainer1) {
       setSelectedPokemon1(encounterForTrainer1.pokemon);
@@ -49,9 +47,7 @@ function AccordionItem(props: AccordionItemProps) {
     }
 
     const encounterForTrainer2 = encountersForRoute.find(
-      (encounter) =>
-        encounter.trainer.name === trainer2.name &&
-        encounter.trainer.trainer_id === trainer2.trainer_id
+      (encounter) => encounter.player_ref === trainer2.ref_id
     );
     if (encounterForTrainer2) {
       setSelectedPokemon2(encounterForTrainer2.pokemon);
