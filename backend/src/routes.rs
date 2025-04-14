@@ -2,6 +2,8 @@ use crate::AppState;
 use crate::models;
 use crate::models::Player;
 use crate::room::RoomRegistry;
+use crate::session::WsSession;
+use actix::Addr;
 use actix_web::{Either, Error, HttpRequest, HttpResponse, get, post, rt, web};
 use actix_ws::AggregatedMessage;
 use futures_util::StreamExt as _;
@@ -102,13 +104,13 @@ pub async fn get_run(
 #[get("/update/{run_id}")]
 pub async fn update_run(
     data: web::Data<AppState>,
-    registry: web::Data<RoomRegistry>,
+    registry: web::Data<Addr<RoomRegistry>>,
     path: web::Path<String>,
     req: HttpRequest,
     stream: web::Payload,
 ) -> Result<HttpResponse, Error> {
     let run_id = path.to_string();
-
+    let session = WsSession::new(run_id, registry.get_ref().clone());
     let (res, mut session, stream) = actix_ws::handle(&req, stream)?;
     let mut stream = stream
         .aggregate_continuations()

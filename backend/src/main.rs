@@ -6,6 +6,7 @@ use room::RoomRegistry;
 mod models;
 mod room;
 mod routes;
+mod session;
 mod tests;
 
 #[derive(Clone)]
