@@ -13,7 +13,7 @@ type Player = {
   trainer_id: number;
 };
 
-type Encounter = {
+export type Encounter = {
   trainer: Player;
   location: string;
   pokemon: string;
@@ -28,6 +28,11 @@ export enum PokemonStatus {
 }
 
 export interface UpdateRunDto {
-  delete_encounter?: { trainer: Player; location: string };
+  delete_encounter?: DeleteEncounterDto;
   updated_encounter?: Encounter;
+}
+
+export interface DeleteEncounterDto {
+  trainer: Player;
+  location: string;
 }

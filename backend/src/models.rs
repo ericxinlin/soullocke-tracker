@@ -40,11 +40,33 @@ pub struct Encounter {
     pub note: Option<String>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
+#[serde(from = "u8", into = "u8")]
 pub enum PokemonStatus {
     Captured,
     Dead,
     InTeam,
+}
+
+impl From<u8> for PokemonStatus {
+    fn from(val: u8) -> Self {
+        match val {
+            0 => PokemonStatus::Captured,
+            1 => PokemonStatus::Dead,
+            2 => PokemonStatus::InTeam,
+            _ => PokemonStatus::Captured,
+        }
+    }
+}
+
+impl From<PokemonStatus> for u8 {
+    fn from(status: PokemonStatus) -> Self {
+        match status {
+            PokemonStatus::Captured => 0,
+            PokemonStatus::Dead => 1,
+            PokemonStatus::InTeam => 2,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize)]

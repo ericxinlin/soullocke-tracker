@@ -2,7 +2,8 @@ import { Accordion, Center, Group, Text } from "@mantine/core";
 import { POKEMON_ROUTE_DATA, RouteData } from "../../data/routes";
 import RoutePanel from "./RoutePanel";
 import PokemonIcon from "../PokemonIcon";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { RunContext } from "../RunPage";
 
 export default function RouteList() {
   const items = POKEMON_ROUTE_DATA.map((route) => (
@@ -23,9 +24,41 @@ interface AccordionItemProps {
 }
 
 function AccordionItem(props: AccordionItemProps) {
+  const { runData } = useContext(RunContext);
   const route = props.route;
   const [selectedPokemon1, setSelectedPokemon1] = useState<string | null>(null);
   const [selectedPokemon2, setSelectedPokemon2] = useState<string | null>(null);
+
+  useEffect(() => {
+    const trainer1 = runData.players[0];
+    const trainer2 = runData.players[1];
+
+    const encountersForRoute = runData.encounters.filter(
+      (encounter) => encounter.location === route.location
+    );
+
+    const encounterForTrainer1 = encountersForRoute.find(
+      (encounter) =>
+        encounter.trainer.name === trainer1.name &&
+        encounter.trainer.trainer_id === trainer1.trainer_id
+    );
+    if (encounterForTrainer1) {
+      setSelectedPokemon1(encounterForTrainer1.pokemon);
+    } else {
+      setSelectedPokemon1(null);
+    }
+
+    const encounterForTrainer2 = encountersForRoute.find(
+      (encounter) =>
+        encounter.trainer.name === trainer2.name &&
+        encounter.trainer.trainer_id === trainer2.trainer_id
+    );
+    if (encounterForTrainer2) {
+      setSelectedPokemon2(encounterForTrainer2.pokemon);
+    } else {
+      setSelectedPokemon2(null);
+    }
+  }, [runData]);
 
   return (
     <Accordion.Item key={route.location} value={route.location}>

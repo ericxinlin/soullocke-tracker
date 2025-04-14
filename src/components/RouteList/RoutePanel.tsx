@@ -57,7 +57,7 @@ export default function RoutePanel(props: ComponentProps) {
 
 function RoutePanelOneSide(props: OneSideProps) {
   const ws = useContext(WebSocketContext);
-  const runData = useContext(RunContext);
+  const { runData } = useContext(RunContext);
   let player = runData.players[props.trainerIndex];
   let trainerId = player.trainer_id;
 

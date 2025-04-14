@@ -55,7 +55,6 @@ impl Handler<Connect> for RoomRegistry {
     type Result = ();
 
     fn handle(&mut self, msg: Connect, _ctx: &mut Context<Self>) {
-        println!("in connect handle");
         if !self.rooms.contains_key(&msg.id_string) {
             self.rooms.insert(msg.id_string.clone(), Vec::new());
         }

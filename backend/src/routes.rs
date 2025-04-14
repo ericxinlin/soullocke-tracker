@@ -106,7 +106,12 @@ pub async fn update_run(
     stream: web::Payload,
 ) -> Result<HttpResponse, Error> {
     let run_id = path.into_inner();
-    let session = WsSession::new(run_id, data.registry.clone());
+    let session = WsSession::new(
+        run_id,
+        data.registry.clone(),
+        data.mongodb_client.clone(),
+        data.db_name.clone(),
+    );
     ws::start(session, &req, stream)
 }
 

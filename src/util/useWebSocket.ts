@@ -2,13 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { UpdateRunDto } from "../models/run";
 
 interface WebSocketMessage {
-  event: string;
-  data?: any;
+  data: UpdateRunDto;
 }
 
 export interface IWebSocketContext {
   messages: WebSocketMessage[];
   sendMessage: (data: UpdateRunDto) => void;
+  clearMessages: () => void;
   socket: WebSocket | null;
 }
 
@@ -25,10 +25,16 @@ export function useWebSocket(url: string) {
     };
 
     socket.onmessage = (event) => {
-      console.log(event);
-      const message: WebSocketMessage = JSON.parse(event.data);
+      let data: UpdateRunDto;
+      try {
+        data = JSON.parse(event.data);
+        if (!data) return;
+      } catch (e) {
+        console.error("Failed to parse message:", e);
+        return;
+      }
+      const message: WebSocketMessage = { data: data };
       setMessages((prevMessages) => [...prevMessages, message]);
-      console.log(message);
     };
 
     socket.onerror = (error) => {
@@ -46,12 +52,15 @@ export function useWebSocket(url: string) {
 
   const sendMessage = (data: UpdateRunDto) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      console.log("Sending payload: ", JSON.stringify(data));
       socketRef.current.send(JSON.stringify(data));
     } else {
       console.error("WebSocket is not open");
     }
   };
 
-  return { messages, sendMessage, socket: socketRef.current };
+  const clearMessages = () => {
+    setMessages([]);
+  };
+
+  return { messages, sendMessage, clearMessages, socket: socketRef.current };
 }
