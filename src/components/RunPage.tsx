@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import Timeline from "./Timeline";
 import RunData from "../models/run";
 import PlayerProfile from "./PlayerProfile";
-import { useWebSocket, IWebSocketContext } from "../util/useWebsocket";
+import { useWebSocket, IWebSocketContext } from "../util/useWebSocket";
 import { createContext } from "react";
 
 export const WebSocketContext = createContext<IWebSocketContext>({

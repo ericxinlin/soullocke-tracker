@@ -1,12 +1,9 @@
 use crate::AppState;
 use crate::models;
 use crate::models::Player;
-use crate::room::RoomRegistry;
 use crate::session::WsSession;
-use actix::Addr;
-use actix_web::{Either, Error, HttpRequest, HttpResponse, get, post, rt, web};
-use actix_ws::AggregatedMessage;
-use futures_util::StreamExt as _;
+use actix_web::{Either, Error, HttpRequest, HttpResponse, get, post, web};
+use actix_web_actors::ws;
 use mongodb::bson::DateTime;
 use mongodb::{
     Collection, bson,
@@ -76,7 +73,7 @@ pub async fn get_run(
 ) -> Either<models::RunData, HttpResponse> {
     let db = data.mongodb_client.database(&data.db_name);
     let runs: Collection<Document> = db.collection("runs");
-    let run_id: String = path.to_string();
+    let run_id: String = path.into_inner();
 
     let db_res = runs.find_one(doc! {"id_string": &run_id}).await;
 
@@ -104,38 +101,13 @@ pub async fn get_run(
 #[get("/update/{run_id}")]
 pub async fn update_run(
     data: web::Data<AppState>,
-    registry: web::Data<Addr<RoomRegistry>>,
     path: web::Path<String>,
     req: HttpRequest,
     stream: web::Payload,
 ) -> Result<HttpResponse, Error> {
-    let run_id = path.to_string();
-    let session = WsSession::new(run_id, registry.get_ref().clone());
-    let (res, mut session, stream) = actix_ws::handle(&req, stream)?;
-    let mut stream = stream
-        .aggregate_continuations()
-        .max_continuation_size(2_usize.pow(20));
-
-    rt::spawn(async move {
-        while let Some(msg) = stream.next().await {
-            match msg {
-                Ok(AggregatedMessage::Text(text)) => {
-                    println!("{text}");
-                    if let Err(e) = session.text(r#"{"acknowledged": 1}"#).await {
-                        println!("Error sending acknowledgement: {e}");
-                    }
-                }
-                Ok(data) => {
-                    println!("Received something else: {data:?}");
-                }
-                Err(e) => {
-                    println!("WS Error: {}", e);
-                }
-            }
-        }
-    });
-
-    Ok(res)
+    let run_id = path.into_inner();
+    let session = WsSession::new(run_id, data.registry.clone());
+    ws::start(session, &req, stream)
 }
 
 #[get("/pingdb")]

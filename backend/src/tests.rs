@@ -2,7 +2,9 @@
 mod test {
     use crate::AppState;
     use crate::models;
+    use crate::room::RoomRegistry;
     use crate::routes;
+    use actix::Actor;
     use actix_web::{App, test, web};
     use dotenv::dotenv;
     use mongodb::{
@@ -27,9 +29,12 @@ mod test {
             .await
             .expect("Failed to drop test database");
 
+        let registry = RoomRegistry::new().start();
+
         AppState {
             mongodb_client: client,
             db_name: "data_test".to_string(),
+            registry,
         }
     }
 

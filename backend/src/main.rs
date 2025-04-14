@@ -1,4 +1,4 @@
-use actix::Actor;
+use actix::{Actor, Addr};
 use actix_web::{App, HttpServer, web};
 use dotenv::dotenv;
 use mongodb::Client;
@@ -13,6 +13,7 @@ mod tests;
 struct AppState {
     mongodb_client: Client,
     db_name: String,
+    registry: Addr<RoomRegistry>,
 }
 
 #[actix_web::main]
@@ -26,18 +27,18 @@ async fn main() -> std::io::Result<()> {
     let mongodb_client = Client::with_uri_str(mongodb_uri)
         .await
         .expect("Error connecting to MongoDB");
+
+    let registry = RoomRegistry::new().start();
     let app_state = web::Data::new(AppState {
         mongodb_client,
         db_name,
+        registry,
     });
-
-    let registry = RoomRegistry::new().start();
 
     println!("Starting server. Host: {}", host);
     HttpServer::new(move || {
         App::new()
             .app_data(app_state.clone())
-            .app_data(registry.clone())
             .service(
                 web::scope("/api")
                     .service(routes::ping_db)

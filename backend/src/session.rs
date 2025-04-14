@@ -12,6 +12,7 @@ const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(5);
 /// How long before lack of client response causes a timeout
 const CLIENT_TIMEOUT: Duration = Duration::from_secs(10);
 
+#[derive(Debug)]
 pub struct WsSession {
     pub run_id: String,
     pub registry: Addr<RoomRegistry>,
@@ -21,6 +22,7 @@ pub struct WsSession {
 
 impl WsSession {
     pub fn new(run_id: String, registry: Addr<RoomRegistry>) -> Self {
+        println!("new session actor");
         Self {
             run_id,
             registry,

@@ -33,6 +33,7 @@ pub struct RoomRegistry {
 
 impl RoomRegistry {
     pub fn new() -> Self {
+        println!("new room registry");
         Self {
             rooms: HashMap::new(),
         }
@@ -55,13 +56,16 @@ impl Handler<Connect> for RoomRegistry {
     type Result = ();
 
     fn handle(&mut self, msg: Connect, _ctx: &mut Context<Self>) {
+        println!("in connect handle");
         if !self.rooms.contains_key(&msg.id_string) {
             self.rooms.insert(msg.id_string.clone(), Vec::new());
         }
-        let Some(sessions) = self.rooms.get_mut(&msg.id_string) else {
-            panic!("Unexpected no room for id_string: {0}", msg.id_string);
-        };
-        sessions.push(msg.addr);
+        match self.rooms.get_mut(&msg.id_string) {
+            Some(sessions) => sessions.push(msg.addr),
+            None => {
+                println!("Unexpected no room for id_string: {}", msg.id_string);
+            }
+        }
     }
 }
 
