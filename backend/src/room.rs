@@ -33,7 +33,6 @@ pub struct RoomRegistry {
 
 impl RoomRegistry {
     pub fn new() -> Self {
-        println!("new room registry");
         Self {
             rooms: HashMap::new(),
         }

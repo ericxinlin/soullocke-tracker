@@ -3,7 +3,7 @@
     route /api/* {
         reverse_proxy backend:8000
     }
-    router /ws/* {
+    route /ws/* {
         reverse_proxy backend:8000
     }
     file_server
