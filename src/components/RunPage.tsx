@@ -3,10 +3,11 @@ import { Container, Group, Stack, Text } from "@mantine/core";
 import { Link } from "react-router";
 import Timeline from "./Timeline";
 import RunData, { UpdateRunDto } from "../models/run";
-import PlayerProfile from "./PlayerProfile";
+import PlayerProfile from "./PlayerProfile/PlayerProfile";
 import { useWebSocket, IWebSocketContext } from "../util/useWebSocket";
 import { createContext, useReducer, useEffect } from "react";
 import { handleEvents, RunAction, runReducer } from "../util/runReducer";
+import { useNavigate } from "react-router";
 
 export const WebSocketContext = createContext<IWebSocketContext>({
   messages: [],
@@ -41,6 +42,7 @@ export default function RunPage() {
     encounters: [],
   };
 
+  const navigate = useNavigate();
   const [runData, dispatch] = useReducer(runReducer, data);
 
   useEffect(() => {
@@ -59,6 +61,7 @@ export default function RunPage() {
         }
       } catch (err) {
         console.error("Error fetching run data", err);
+        navigate("/error");
       }
     }
     fetchRunData();
@@ -78,7 +81,7 @@ export default function RunPage() {
   }, [wsContext.messages]);
 
   const players = runData.players.map((player) => (
-    <PlayerProfile ref_id={player.ref_id} />
+    <PlayerProfile ref_id={player.ref_id} key={player.ref_id} />
   ));
 
   return (

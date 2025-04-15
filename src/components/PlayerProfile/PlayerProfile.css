@@ -1,0 +1,7 @@
+.trainer-name-container {
+  cursor: pointer;
+}
+
+.trainer-name-container:hover {
+  text-decoration: underline dashed;
+}

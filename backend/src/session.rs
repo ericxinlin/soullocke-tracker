@@ -211,17 +211,25 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsSession {
                                         }
                                     }
                                 };
-                                let trainer_doc: Document =
-                                    match mongodb::bson::to_document(&updated_trainer) {
-                                        Ok(doc) => doc,
-                                        Err(e) => {
-                                            println!("Error serializing updated trainer: {}", e);
-                                            return;
-                                        }
-                                    };
+                                let mut set_fields = Document::new();
+                                if let Some(name) = updated_trainer.name {
+                                    set_fields.insert("players.$.name", name);
+                                }
+                                if let Some(trainer_id) = updated_trainer.trainer_id {
+                                    set_fields.insert("players.$.trainer_id", trainer_id);
+                                }
+                                if set_fields.is_empty() {
+                                    println!(
+                                        "No fields to update for trainer: {}",
+                                        updated_trainer.ref_id
+                                    );
+                                    return;
+                                }
+
                                 let update_doc = doc! {
-                                    "$set": {"players.$": trainer_doc.clone()}
+                                    "$set": set_fields
                                 };
+
                                 match runs.update_one(filter, update_doc).await {
                                     Ok(update_result) => {
                                         println!("Update result: {:?}", update_result);
