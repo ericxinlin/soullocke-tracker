@@ -6,7 +6,7 @@ import RunData, { UpdateRunDto } from "../models/run";
 import PlayerProfile from "./PlayerProfile";
 import { useWebSocket, IWebSocketContext } from "../util/useWebSocket";
 import { createContext, useReducer, useEffect } from "react";
-import { RunAction, runReducer } from "../util/runReducer";
+import { handleEvents, RunAction, runReducer } from "../util/runReducer";
 
 export const WebSocketContext = createContext<IWebSocketContext>({
   messages: [],
@@ -72,22 +72,14 @@ export default function RunPage() {
     wsContext.messages.forEach((message) => {
       console.log("Received message:", message);
       const dto: UpdateRunDto = message.data;
-      if (!dto) return;
-      if (dto.delete_encounter) {
-        dispatch({
-          type: "DELETE_ENCOUNTER",
-          payload: dto.delete_encounter,
-        });
-      }
-      if (dto.updated_encounter) {
-        dispatch({
-          type: "UPDATE_ENCOUNTER",
-          payload: dto.updated_encounter,
-        });
-      }
+      handleEvents(dto, dispatch);
     });
     wsContext.clearMessages();
   }, [wsContext.messages]);
+
+  const players = runData.players.map((player) => (
+    <PlayerProfile ref_id={player.ref_id} />
+  ));
 
   return (
     <WebSocketContext value={wsContext}>
@@ -106,9 +98,7 @@ export default function RunPage() {
               </Text>
             </Link>
           </Group>
-          <Group justify="center">
-            <PlayerProfile />
-          </Group>
+          <Group justify="center">{players}</Group>
           <Container w="67%">
             <Timeline />
           </Container>

@@ -1,12 +1,26 @@
 import { Image, Group, Stack, Text, FileButton, Button } from "@mantine/core";
 import { readFile } from "../util/uploadFile";
 import { TRAINER_SPRITE_MAP } from "../data/sprites";
+import { useContext } from "react";
+import { WebSocketContext } from "./RunPage";
 
-export default function PlayerProfile() {
+interface ComponentProps {
+  ref_id: string;
+}
+
+export default function PlayerProfile(props: ComponentProps) {
+  const ws = useContext(WebSocketContext);
   async function updateFile(file: File | null) {
-    if (!file) return 0;
+    if (!file) return;
     const saveData = await readFile(file);
-    if (!saveData) return 0;
+    if (!saveData || !saveData.data?.trainedId) return;
+    let updatedTrainer = {
+      ref_id: props.ref_id,
+      trainer_id: saveData.data.trainedId,
+    };
+    ws.sendMessage({
+      updated_trainer: updatedTrainer,
+    });
   }
 
   return (

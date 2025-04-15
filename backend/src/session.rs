@@ -196,6 +196,41 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WsSession {
                                     }
                                 }
                             }
+
+                            // updated_trainer
+                            if let Some(updated_trainer) = update_dto.updated_trainer {
+                                println!(
+                                    "Updating trainer with ref_id: {}",
+                                    updated_trainer.ref_id
+                                );
+                                let filter = doc! {
+                                    "id_string": &run_id,
+                                    "players": {
+                                        "$elemMatch": {
+                                            "ref_id": &updated_trainer.ref_id,
+                                        }
+                                    }
+                                };
+                                let trainer_doc: Document =
+                                    match mongodb::bson::to_document(&updated_trainer) {
+                                        Ok(doc) => doc,
+                                        Err(e) => {
+                                            println!("Error serializing updated trainer: {}", e);
+                                            return;
+                                        }
+                                    };
+                                let update_doc = doc! {
+                                    "$set": {"players.$": trainer_doc.clone()}
+                                };
+                                match runs.update_one(filter, update_doc).await {
+                                    Ok(update_result) => {
+                                        println!("Update result: {:?}", update_result);
+                                    }
+                                    Err(e) => {
+                                        println!("Error updating trainer: {}", e);
+                                    }
+                                }
+                            }
                         });
                     }
                     Err(e) => {

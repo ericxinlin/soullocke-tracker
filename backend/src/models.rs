@@ -74,10 +74,18 @@ impl From<PokemonStatus> for u8 {
 pub struct UpdateRunDto {
     pub delete_encounter: Option<DeleteEncounterDto>,
     pub updated_encounter: Option<Encounter>,
+    pub updated_trainer: Option<UpdateTrainerDto>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct DeleteEncounterDto {
     pub player_ref: String,
     pub location: String,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct UpdateTrainerDto {
+    pub ref_id: String,
+    pub name: Option<String>,
+    pub trainer_id: Option<u32>,
 }

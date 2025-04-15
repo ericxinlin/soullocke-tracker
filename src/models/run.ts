@@ -31,9 +31,16 @@ export enum PokemonStatus {
 export interface UpdateRunDto {
   delete_encounter?: DeleteEncounterDto;
   updated_encounter?: Encounter;
+  updated_trainer?: UpdateTrainerDto;
 }
 
 export interface DeleteEncounterDto {
   player_ref: string;
   location: string;
+}
+
+export interface UpdateTrainerDto {
+  ref_id: string;
+  name?: string;
+  trainer_id?: number;
 }
