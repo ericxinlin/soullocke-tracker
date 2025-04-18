@@ -4,7 +4,7 @@ import {
   Stack,
   Text,
   FileButton,
-  Button,
+  Tooltip,
   TextInput,
   ActionIcon,
   FocusTrap,
@@ -14,7 +14,7 @@ import { TRAINER_SPRITE_MAP } from "../../data/sprites";
 import { useContext, useState } from "react";
 import { RunContext, WebSocketContext } from "../RunPage";
 import { useHover } from "@mantine/hooks";
-import { FaCheck, FaEdit } from "react-icons/fa";
+import { FaCheck, FaEdit, FaFileUpload } from "react-icons/fa";
 import "./PlayerProfile.css";
 
 interface ComponentProps {
@@ -105,9 +105,11 @@ export default function PlayerProfile(props: ComponentProps) {
         )}
         <FileButton onChange={updateFile} accept=".sav">
           {(props) => (
-            <Button {...props} w={200}>
-              Upload .sav
-            </Button>
+            <Tooltip label="Upload .sav" position="bottom" withArrow>
+              <ActionIcon {...props} variant="default">
+                <FaFileUpload size={16} />
+              </ActionIcon>
+            </Tooltip>
           )}
         </FileButton>
       </Stack>

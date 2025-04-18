@@ -2,6 +2,7 @@ import { useParams } from "react-router";
 import { Container, Group, Stack, Text } from "@mantine/core";
 import { Link } from "react-router";
 import Timeline from "./Timeline";
+import TeamDisplay from "./TeamDisplay";
 import RunData, { UpdateRunDto } from "../models/run";
 import PlayerProfile from "./PlayerProfile/PlayerProfile";
 import { useWebSocket, IWebSocketContext } from "../util/useWebSocket";
@@ -101,7 +102,11 @@ export default function RunPage() {
               </Text>
             </Link>
           </Group>
-          <Group justify="center">{players}</Group>
+          <Group justify="space-evenly">
+            {players[0]}
+            <TeamDisplay />
+            {players[1]}
+          </Group>
           <Container w="67%">
             <Timeline />
           </Container>
